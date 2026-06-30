@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Clock\DatePoint;
+use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: AlbumRepository::class)]
 class Album
@@ -25,8 +26,8 @@ class Album
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $info = null;
 
-    #[ORM\Column(type: 'day_point')]
-    private ?DatePoint $releaseDate = null;
+    #[ORM\Column(type: 'date')]
+    private ?DateTimeInterface $releaseDate = null;
 
     /**
      * @var Collection<int, Song>
@@ -80,12 +81,12 @@ class Album
         return $this;
     }
 
-    public function getReleaseDate(): ?DatePoint
+    public function getReleaseDate(): ?DateTimeInterface
     {
         return $this->releaseDate;
     }
 
-    public function setReleaseDate(DatePoint $releaseDate): static
+    public function setReleaseDate(DateTimeInterface $releaseDate): static
     {
         $this->releaseDate = $releaseDate;
 

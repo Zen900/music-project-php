@@ -18,6 +18,8 @@ class AppFixtures extends Fixture
         $album->setInfo("Artist A");
         $album->setReleaseDate(new \DateTime('2025-10-20'));
 
+        $manager->persist($album);
+
         $song = new Song();
         $song->setSongTitle("Song A");
         $song->setAudioFile("songA.mp3");
@@ -25,20 +27,22 @@ class AppFixtures extends Fixture
         $song->setInfo("some info");
         $song->setAlbum($album);
 
-        $lyric1 = new Lyric();
+        $manager->persist($song);
+
+        $lyric1 = new Lyrics();
         $lyric1->setLine("Start of the song");
         $lyric1->setTime(1);
         $lyric1->setSong($song);
 
-        $lyric2 = new Lyric();
+        $manager->persist($lyric1);
+
+        $lyric2 = new Lyrics();
         $lyric2->setLine("This is the second line");
         $lyric2->setTime(5);
         $lyric2->setSong($song);
 
-        $manager->persist($album);
-        $manager->persist($song);
-        $manager->persist($lyric1);
         $manager->persist($lyric2);
+        
         $manager->flush();
     }
 }
