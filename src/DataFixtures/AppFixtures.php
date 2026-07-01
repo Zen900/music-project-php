@@ -20,6 +20,14 @@ class AppFixtures extends Fixture
 
         $manager->persist($album);
 
+        $album2 = new Album();
+        $album2->setAlbumTitle("Album B");
+        $album2->setAlbumCover("albumB.jpg");
+        $album2->setInfo("Artist B");
+        $album2->setReleaseDate(new \DateTime('2025-11-20'));
+
+        $manager->persist($album2);
+
         $song = new Song();
         $song->setSongTitle("Song A");
         $song->setAudioFile("songA.mp3");
@@ -42,7 +50,7 @@ class AppFixtures extends Fixture
         $lyric2->setSong($song);
 
         $manager->persist($lyric2);
-        
+
         $manager->flush();
     }
 }

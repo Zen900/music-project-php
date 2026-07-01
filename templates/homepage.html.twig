@@ -1,0 +1,13 @@
+{% for album in albums %}
+
+    <h2>{{ album.albumTitle }}</h2>
+    <a href="{{ path('album_show', {id: album.id}) }}"><img src="/images/{{ album.albumCover }}" width="200" height="200" ></a>
+    <p>{{ album.info }}</p>
+    <p>{{ album.id }}</p>
+    <ul>
+        {% for song in album.songs %}
+            <li>{{ song.songTitle }}</li>
+        {% endfor %}
+    </ul>
+
+{% endfor %}
