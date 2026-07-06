@@ -1,13 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
 {% for album in albums %}
 
     <h2>{{ album.albumTitle }}</h2>
     <a href="{{ path('album_show', {id: album.id}) }}"><img src="/images/{{ album.albumCover }}" width="200" height="200" ></a>
-    <p>{{ album.info }}</p>
-    <p>{{ album.id }}</p>
     <ul>
         {% for song in album.songs %}
-            <li>{{ song.songTitle }}</li>
+            <li>{{ song.songTitle }} {{ (song.length / 60)|round(0, 'floor') }}:{{ '%02d'|format(song.length % 60) }} </li>
+            <button onclick="addToQueue('{{ song.songTitle }}', '{{ song.audioFile }}', '{{ album.albumCover }}')"> Add to queue </button>
         {% endfor %}
     </ul>
 
 {% endfor %}
+
+{% endblock %}

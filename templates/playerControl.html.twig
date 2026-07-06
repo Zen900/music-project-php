@@ -1,0 +1,81 @@
+<div class="player">
+    <p id="current-song">No song selected</p>
+    <audio id="audio-player" controls autoplay onended="endOfSong()">
+        <source id="audio-source" src="">
+    </audio>
+</div>
+
+<div class="queue">
+
+    <h3>Queue</h3>
+
+    <div id="queue-list"></div>
+
+</div>
+
+<script>
+
+    let queue = [];
+    let index = 0;
+
+    function addToQueue(songTitle, audioFile, albumCover) {
+        queue.push({title: songTitle, file: audioFile, cover: albumCover});
+        renderQueue();
+        if (queue.length == 1) {
+            playSong(queue[0]);
+        }
+    }
+
+    function endOfSong() {
+        index++;
+        renderQueue();
+        if (queue.length > index) {
+            playSong(queue[index]);
+        }
+    }
+
+    function playSong(song) {
+        document.getElementById('current-song').innerText = song.title;
+
+        const player = document.getElementById('audio-player');
+        const source = document.getElementById('audio-source');
+
+        source.src = "/songs/" + song.file  ;
+
+        player.load();
+        player.play();
+    }
+
+    function renderQueue() {
+
+        const queueList = document.getElementById('queue-list');
+
+        queueList.innerHTML = '';
+
+        queue.forEach((song, i) => {
+
+            if (i > index) {
+
+                queueList.innerHTML += `
+                    <p>${song.title}</p>
+
+                    <img 
+                        src="/images/${song.cover}" 
+                        width="50" 
+                        height="50"
+                    />
+
+                    <button onclick="deleteSongFromQueue(${i})">
+                        -
+                    </button>
+                `;
+            }
+        });
+    }
+
+    function deleteSongFromQueue(index) {
+        queue.splice(index, 1);
+        renderQueue();
+    }
+
+</script>
