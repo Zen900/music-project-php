@@ -4,9 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Album;
 use App\Repository\AlbumRepository;
+use App\Form\Type\AlbumType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 class AlbumController extends AbstractController
 {
@@ -19,13 +23,44 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    #[Route('/', name: 'album_index')]
+    #[Route('/', name: 'homepage')]
     public function showAllAlbums(AlbumRepository $albumRepository): Response
     {
         $albums = $albumRepository->findAll();
 
         return $this->render('homepage.html.twig', [
             'albums' => $albums,
+        ]);
+    }
+
+    #[Route('/upload', name: 'upload')]
+    public function uploadAlbum(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $album = new Album();
+        $form = $this->createForm(AlbumType::class, $album);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $albumCover = $form->get('albumCover')->getData();
+            
+            if($albumCover) {
+                $fileName = uniqid() . '.' . $albumCover->guessExtension();
+
+                $albumCover->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+
+                $album->setAlbumCover($fileName);
+            }
+
+            $entityManager->persist($album);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('homepage');
+        }
+        return $this->render('upload.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }
