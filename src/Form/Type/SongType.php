@@ -29,16 +29,14 @@ class SongType extends AbstractType
                             'audio/wav',
                         ],
                         mimeTypesMessage: 'Upload only audio file.',
-                        maxSize: '20M'
                     )
                 ],
+                'attr' => [
+                    'accept' => 'audio/*'
+                ]
             ])
             -> add('info', TextType::class, [
                 'required' => false,
-            ])
-            ->add('album', EntityType::class, [
-                'class' => Album::class,
-                'choice_label' => 'albumTitle',
             ])
             ->add('save', SubmitType::class);
     }

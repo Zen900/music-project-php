@@ -1,10 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
 {{ form_start(form) }}
 
 {{ form_row(form.songTitle) }}
 {{ form_row(form.audioFile) }}
 {{ form_row(form.info) }}
-{{ form_row(form.album) }}
 
 {{ form_row(form.save) }}
 
 {{ form_end(form) }}
+
+{% endblock %}

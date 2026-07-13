@@ -33,7 +33,7 @@ class AlbumController extends AbstractController
         ]);
     }
 
-    #[Route('/upload', name: 'upload')]
+    #[Route('/upload', name: 'upload_album')]
     public function uploadAlbum(Request $request, EntityManagerInterface $entityManager): Response
     {
         $album = new Album();
@@ -44,21 +44,36 @@ class AlbumController extends AbstractController
             $albumCover = $form->get('albumCover')->getData();
             
             if($albumCover) {
-                $fileName = uniqid() . '.' . $albumCover->guessExtension();
+                try{
+                    $fileName = uniqid() . '.' . $albumCover->guessExtension();
 
-                $albumCover->move(
-                    $this->getParameter('images_directory'),
-                    $fileName
-                );
+                    $albumCover->move(
+                        $this->getParameter('images_directory'),
+                        $fileName
+                    );
 
-                $album->setAlbumCover($fileName);
+                    $album->setAlbumCover($fileName);
+                }
+                catch(\Exception $e) {
+                    $this->addFlash(
+                        'warning',
+                        'Album uploaded, but cover upload failed.'
+                    );
+                }
             }
 
             $entityManager->persist($album);
             $entityManager->flush();
 
+            $this->addFlash(
+                'success',
+                'Album successfully uploaded!'
+            );
+
             return $this->redirectToRoute('homepage');
+
         }
+
         return $this->render('upload.html.twig', [
             'form' => $form->createView(),
         ]);

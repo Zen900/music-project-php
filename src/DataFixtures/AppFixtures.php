@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
         $song = new Song();
         $song->setSongTitle("Song A");
         $song->setAudioFile("songA.mp3");
-        $song->setLength(240);
+        $song->setLength(215);
         $song->setInfo("some info");
         $song->setAlbum($album);
 
@@ -50,7 +50,6 @@ class AppFixtures extends Fixture
         $lyric2->setSong($song);
 
         $manager->persist($lyric2);
-
         $manager->flush();
     }
 }

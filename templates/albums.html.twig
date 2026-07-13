@@ -5,5 +5,8 @@
 <h1> {{ album.albumTitle }} </h1>
 <p> Release date: {{ album.releaseDate|date('d-m-Y') }} </p>
 <img src="/images/{{ album.albumCover }}" width="200" height="200">
+<p></p>
+<a href="{{ path('upload_song', {id: album.id}) }}">Upload Song</a>
+
 
 {% endblock %}

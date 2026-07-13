@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1> {{ song.songTitle }} </h1>
+    <p> {{ (song.length / 60)|round(0, 'floor') }}:{{ '%02d'|format(song.length % 60) }} </p>
+    <img src="/images/{{ song.album.albumCover }}" width="200" height="200">
+    <p> {{ song.info }} </p>
+    <h2> Lyrics: </h2>
+
+    {% for lyric in song.lyrics %}
+
+        <p> {{ lyric.line }} </p>
+
+    {% endfor %}
+
+{% endblock %}

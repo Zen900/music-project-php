@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Music Project{% endblock %}</title>
+    <a href="{{ path('homepage') }}">Home</a>
 </head>
 
 <body>
 
     <header>
         <h1>Music Project</h1>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
     </header>
 
     <main>

@@ -33,6 +33,9 @@ class AlbumType extends AbstractType
                         maxSize: '5M'
                     ),
                 ],
+                'attr' => [
+                    'accept' => 'image/*'
+                ]
             ])
             -> add('info', TextType::class, [
                 'required' => false,

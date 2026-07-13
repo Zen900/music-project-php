@@ -18,6 +18,12 @@
     let queue = [];
     let index = 0;
 
+    function selectSong(songTitle, audioFile, albumCover) {
+        queue = [];
+        index = 0;
+        addToQueue(songTitle, audioFile, albumCover);
+    }
+
     function addToQueue(songTitle, audioFile, albumCover) {
         queue.push({title: songTitle, file: audioFile, cover: albumCover});
         renderQueue();

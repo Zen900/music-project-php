@@ -1,3 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
 {{ form_start(form) }}
 
 {{ form_row(form.albumTitle) }}
@@ -9,3 +13,5 @@
 {{ form_row(form.save) }}
 
 {{ form_end(form) }}
+
+{% endblock %}
