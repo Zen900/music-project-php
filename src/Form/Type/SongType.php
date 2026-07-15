@@ -37,6 +37,7 @@ class SongType extends AbstractType
             ])
             -> add('info', TextType::class, [
                 'required' => false,
+                'label' => 'Genre',
             ])
             ->add('save', SubmitType::class);
     }

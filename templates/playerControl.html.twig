@@ -1,16 +1,18 @@
 <div class="player">
-    <p id="current-song">No song selected</p>
-    <audio id="audio-player" controls autoplay onended="endOfSong()">
-        <source id="audio-source" src="">
-    </audio>
-</div>
+    <div class="current-player">
+        <p id="current-song">No song selected</p>
+        <audio id="audio-player" controls autoplay onended="endOfSong()">
+            <source id="audio-source" src="">
+        </audio>
+    </div>
 
-<div class="queue">
+    <div class="queue">
 
-    <h3>Queue</h3>
+        <h3>Queue</h3>
 
-    <div id="queue-list"></div>
+        <div id="queue-list"></div>
 
+    </div>
 </div>
 
 <script>
