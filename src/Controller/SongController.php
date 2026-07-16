@@ -6,6 +6,7 @@ use App\Entity\Song;
 use App\Entity\Album;
 use App\Repository\SongRepository;
 use App\Form\Type\SongType;
+use App\Service\SongService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,57 +25,40 @@ class SongController extends AbstractController
     }
 
     #[Route('/album/{id}/upload-song', name: 'upload_song')]
-    public function uploadSong(Request $request, EntityManagerInterface $entityManager, Album $album,): Response
+    public function uploadSong(Request $request, Album $album, SongService $songService): Response
     {
         $song = new Song();
+
         $form = $this->createForm(SongType::class, $song);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
             $audioFile = $form->get('audioFile')->getData();
 
-            if($audioFile) {
-                try {
-                    $fileName = uniqid() . '.' . $audioFile->guessExtension();
-                    $audioFile->move(
-                        $this->getParameter('songs_directory'),
-                        $fileName
-                    );
-                    $song->setAudioFile($fileName);
-                    $getID3 = new \getID3;
 
-                    $fileInfo = $getID3->analyze(
-                        $this->getParameter('songs_directory') . '/' . $fileName
-                    );
+            if ($songService->uploadSong($song, $album, $audioFile)) {
 
-                    $duration = (int)$fileInfo['playtime_seconds'];
-                    $song->setLength($duration);
-                    $song->setAlbum($album);
-                    $entityManager->persist($song);
-                    $entityManager->flush();
+                $this->addFlash(
+                    'success',
+                    'Song successfully uploaded!'
+                );
 
-                    $this->addFlash(
-                        'success',
-                        'Song successfully uploaded!'
-                    );
-                }
-                catch (\Exception $e) {
-                    $this->addFlash(
-                        'error',
-                        'Uploading the song failed.'
-                    );
-                }
+            } else {
 
-                return $this->redirectToRoute('album_show', ['id' => $album->getId()]);
-            }
-            else {
                 $this->addFlash(
                     'error',
-                    'Please select an audio file.'
+                    'Uploading the song failed.'
                 );
             }
+
+            return $this->redirectToRoute(
+                'album_show',
+                ['id' => $album->getId()]
+            );
         }
-        
+
         return $this->render('uploadSong.html.twig', [
             'form' => $form->createView(),
         ]);
